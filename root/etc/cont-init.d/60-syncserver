@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+STAMP="/config/.initialized"
+
+if [ -f ${STAMP} ]; then
+  echo "syncserver already configured, nothing to do."
+  exit 0
+fi
+
+cd /opt/syncserver || exit
+
+/usr/local/bin/rails db:create db:migrate
+if [ $? -eq 0 ]; then
+  echo "syncserver successfully to configured."
+  touch /config/.initialized
+else
+  echo "syncserver failed to configure. exiting."
+  exit 0
+fi

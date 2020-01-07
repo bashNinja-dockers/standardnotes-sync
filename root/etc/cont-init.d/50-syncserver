@@ -1,0 +1,50 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+if [ ! -L "/opt/syncserver/.env" ]; then
+  ln -s /config/.env /opt/syncserver/.env
+fi
+
+[ -z "$DB_DATABASE" ] && DB_DATABASE="standard_notes_db"
+[ -z "$DB_USERNAME" ] && DB_USERNAME="std_notes_user"
+[ -z "$DB_PASSWORD" ] && DB_PASSWORD="changeme123"
+[ -z "$DB_ROOT_PASSWORD" ] && DB_ROOT_PASSWORD="changeme123"
+[ -z "$EXPOSED_PORT" ] && EXPOSED_PORT="3000"
+[ -z "$SECRET_KEY_BASE" ] && SECRET_KEY_BASE="changeme123"
+[ -z "$RAILS_ENV" ] && RAILS_ENV="development"
+[ -z "$DB_PORT" ] && DB_PORT="3306"
+[ -z "$DB_HOST" ] && DB_HOST="127.0.0.1"
+
+STAMP="/config/.env"
+
+if [ -f ${STAMP} ]; then
+  echo "syncserver already configured, nothing to do."
+  exit 0
+fi
+
+if [ ! -f /config/.env ]; then
+    echo '# Sample ENV setup Variables' >> /config/.env
+    echo '# Copy this file and update as needed.' >> /config/.env
+    echo '#' >> /config/.env
+    echo '#   $ cp env.sample .env' >> /config/.env
+    echo '#' >> /config/.env
+    echo '# Do not include this new file in source control' >> /config/.env
+    echo '#' >> /config/.env
+    echo '' >> /config/.env
+    echo '# Rails Settings' >> /config/.env
+    echo 'EXPOSED_PORT='$EXPOSED_PORT >> /config/.env
+    echo 'SECRET_KEY_BASE='$SECRET_KEY_BASE >> /config/.env
+    echo 'RAILS_ENV='$RAILS_ENV >> /config/.env
+    echo '#SQS_QUEUE=somequeue' >> /config/.env
+    echo '#AWS_REGION=us-west1' >> /config/.env
+    echo '' >> /config/.env
+    echo '# Database Settings' >> /config/.env
+    echo 'DB_PORT='$DB_PORT >> /config/.env
+    echo 'DB_HOST='$DB_HOST >> /config/.env
+    echo '#DB_HOST=db #=> If using docker-compose' >> /config/.env
+    echo '' >> /config/.en
+    echo 'DB_DATABASE='$DB_DATABASE >> /config/.env
+    echo 'DB_USERNAME='$DB_USERNAME >> /config/.env
+    echo 'DB_PASSWORD='$DB_PASSWORD >> /config/.env
+    echo 'DB_ROOT_PASSWORD='$DB_ROOT_PASSWORD >> /config/.env
+fi

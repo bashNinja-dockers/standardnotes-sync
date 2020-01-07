@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+cd /opt/syncserver || exit
+
+chown -R abc:abc /opt/syncserver
+
+exec \
+	s6-setuidgid abc /usr/local/bin/rails s
